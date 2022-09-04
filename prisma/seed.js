@@ -1,16 +1,20 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-async function main() {
-  const newPost = await prisma.post.create();
+async function seed() {
+  const testUser = await prisma.user.create({
+    data: {
+      username: "test",
+      email: "test@email.com",
+      password: "testpassword",
+    },
+  });
+
+  process.exit(0);
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+seed().catch(async (error) => {
+  console.error(error);
+  await prisma.$disconnect();
+  process.exit(1);
+});
